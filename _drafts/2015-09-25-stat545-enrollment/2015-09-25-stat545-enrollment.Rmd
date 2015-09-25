@@ -21,8 +21,9 @@ library(grid)
 data <- read.delim('data/2015_STAT545_enrollment.csv', sep=",")
 ```
 
-The instructor, [\@JennyBryan](https://twitter.com/JennyBryan), recently compiled a CSV of [enrollment in STAT 545A in 2015 by degree and program](https://gist.github.com/jennybc/924fe242a31e0239762f#file-2015_stat545_enrollment-csv). And I decided to do some exploring of this data. Below is what the data looks like:
+The instructor, [\@JennyBryan](https://twitter.com/JennyBryan), recently compiled a CSV of [enrollment in STAT 545A in 2015 by degree and program](https://gist.github.com/jennybc/924fe242a31e0239762f#file-2015_stat545_enrollment-csv). And I decided to do some exploration of this data. Pictorially (in a heatmap), the raw data looks like the following: 
 
+### Statistics, statistics, statistics
 ```{r, echo=FALSE, dev="png", dpi=340, out.width="604px"}
 databysubject <- gather(data, Program, Count, -Subject)
 ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
@@ -44,8 +45,9 @@ ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
         )
 ```
 
-This heatmap is orded by number of students by program. Here we see that most students taking this course belong to Statistics.
+This heatmap, orded by number of students per program, shows that most students taking this course belong to Statistics. This doesn't come as too much of surprise since the course is provided by the Statistics department e.g. **STAT** 545A. As a Bioinformatics student, we are representing third place.
 
+### Mostly Masters students
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
 databyprogram <- data.frame(Count=colSums(data[,c("BSC", "Masters", "PHD")]))
 ggplot(databyprogram,
@@ -61,4 +63,5 @@ ggplot(databyprogram,
         )
 ```
 
-Looking at the data differently, we see that there is twice as many Masters students than PHD student. There is also 20x more Masters students than BSC students.
+Looking at the data differently, we see that there is twice as many Masters students than PHD students. There is also 20x more Masters students than BSC students. STAT 545 is a graduate course, so it makes sense there is less BSC students.
+
