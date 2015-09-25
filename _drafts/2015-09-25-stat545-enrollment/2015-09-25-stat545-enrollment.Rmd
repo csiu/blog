@@ -6,6 +6,9 @@ output:
     html_document:
         keep_md: yes
 ---
+```{r img-setup, include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(fig.align='center')
+```
 
 As part of my education in graduate school, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io). Here we learn data wrangling, exploration, and analysis with R.
 
