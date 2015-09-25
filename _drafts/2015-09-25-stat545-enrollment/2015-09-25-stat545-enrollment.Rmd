@@ -37,8 +37,25 @@ ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
         panel.grid.major = element_blank(),
         axis.ticks.margin = unit(c(0.1,-1), 'lines'),
         axis.ticks = element_line(colour="grey90"),
-        axis.text = element_text(colour="black"))
+        axis.text = element_text(colour="black")
+        )
 ```
 
 This heatmap is orded by number of students by program. Here we see that most students taking this course belong to Statistics.
 
+```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
+databyprogram <- data.frame(Count=colSums(data[,c("BSC", "Masters", "PHD")]))
+ggplot(databyprogram,
+       aes(x=rownames(databyprogram), y=Count, label=Count)) +
+  geom_bar(stat="identity") +
+  geom_text(vjust=-0.4) +
+  ylim(0, 41) +
+  xlab("") +
+  ylab("Number of students") +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()
+        )
+```
+
+Looking at the data differently, we see that there is twice as many Masters students than PHD student. There is also 20x more Masters students than BSC students.
