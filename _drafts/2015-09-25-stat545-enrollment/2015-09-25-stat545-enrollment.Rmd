@@ -1,0 +1,44 @@
+---
+title: "STAT545 enrollment"
+author: "csiu"
+date: "September 25, 2015"
+output:
+    html_document:
+        keep_md: yes
+---
+
+As part of my education in graduate school, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io). Here we learn data wrangling, exploration, and analysis with R.
+
+```{r, echo=FALSE}
+library(tidyr)
+library(ggplot2)
+library(grid)
+
+# setwd('_drafts/2015-09-25-stat545-enrollment/')
+data <- read.delim('data/2015_STAT545_enrollment.csv', sep=",")
+```
+
+The instructor, [\@JennyBryan](https://twitter.com/JennyBryan), recently compiled a CSV of [enrollment in STAT 545A in 2015 by degree and program](https://gist.github.com/jennybc/924fe242a31e0239762f#file-2015_stat545_enrollment-csv). And I decided to do some exploring of this data. Below is what the data looks like:
+
+```{r, echo=FALSE, dev="png", dpi=340, out.width="604px"}
+databysubject <- gather(data, Program, Count, -Subject)
+ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
+       aes(y=Subject, x=Program, fill=Count, label=Count)) +
+  geom_tile(color="grey70") +
+  geom_text(color="white") +
+  xlab("") +
+  ylab("") +
+  scale_fill_gradient(low="white", high="blue") +
+  #scale_y_discrete(limits = rev(levels(data$Subject))) +
+  scale_y_discrete(limits = rev(as.character(data$Subject))) +
+  guides(fill=FALSE) +
+  theme(panel.background = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.ticks.margin = unit(c(0.1,-1), 'lines'),
+        axis.ticks = element_line(colour="grey90"),
+        axis.text = element_text(colour="black"))
+```
+
+This heatmap is orded by number of students by program. Here we see that most students taking this course belong to Statistics.
+
