@@ -16,6 +16,7 @@ As part of my education in graduate school, I'm enrolled in [STAT 545A: Explorat
 library(tidyr)
 library(ggplot2)
 library(grid)
+library(plyr)
 
 # setwd('_drafts/2015-09-25-stat545-enrollment/')
 data <- read.delim('data/2015_STAT545_enrollment.csv', sep=",")
@@ -68,3 +69,19 @@ Looking at the data differently, we see that there is twice as many Masters stud
 ## Past
 
 Also provided is [STAT 545 enrollment data from the past](https://github.com/STAT545-UBC/STAT545-UBC.github.io/blob/master/course-admin/history/STAT545-registered-students-all-time-anonymized.csv)
+
+### Enrollment by gender
+
+```{r echo=FALSE, dev="png", dpi=340, out.width="650px", fig.width=10, fig.height=7, warning=FALSE}
+ggplot(pastdata, aes(x=Program, fill=Gender)) +
+  geom_bar(subset=.(Gender=="Female")) +
+  geom_bar(subset=.(Gender=="Male"), aes(y = ..count.. * (-1))) +
+  scale_x_discrete(limits = rev(names(sort(table(pastdata$Program)))) ) + 
+  scale_y_continuous(breaks=seq(-60,40,10), labels=abs(seq(-60,40,10))) +
+  xlab("") +
+  ylab("Enrollment by gender") +
+  coord_flip() +
+  theme(
+    axis.text.y = element_text(colour="black")
+  )
+```
