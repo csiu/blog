@@ -70,6 +70,23 @@ Looking at the data differently, we see that there is twice as many Masters stud
 
 Also provided is [STAT 545 enrollment data from the past](https://github.com/STAT545-UBC/STAT545-UBC.github.io/blob/master/course-admin/history/STAT545-registered-students-all-time-anonymized.csv)
 
+```{r, echo=FALSE}
+pastdata <- read.delim('data/STAT545-registered-students-all-time-anonymized.csv', 
+                       sep=',', na.strings="")
+
+pastdata$Program <- factor(pastdata$Program, exclude=NULL)
+pastdata$year <- as.factor(pastdata$year)
+```
+
+```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
+ggplot(pastdata, aes(x=year, color=Gender)) + 
+  geom_bar() + 
+  xlab("") + 
+  ylab("Number of enrolled students") +
+  scale_color_discrete(guide = guide_legend(reverse=TRUE)) +
+  theme(panel.grid.major.x = element_blank())
+```
+
 ### Enrollment by gender
 
 ```{r echo=FALSE, dev="png", dpi=340, out.width="650px", fig.width=10, fig.height=7, warning=FALSE}
@@ -85,3 +102,4 @@ ggplot(pastdata, aes(x=Program, fill=Gender)) +
     axis.text.y = element_text(colour="black")
   )
 ```
+
