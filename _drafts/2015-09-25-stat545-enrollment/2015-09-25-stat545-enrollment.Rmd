@@ -65,3 +65,6 @@ ggplot(databyprogram,
 
 Looking at the data differently, we see that there is twice as many Masters students than PHD students. There is also 20x more Masters students than BSC students. STAT 545 is a graduate course, so it makes sense there is less BSC students.
 
+## Past
+
+Also provided is [STAT 545 enrollment data from the past](https://github.com/STAT545-UBC/STAT545-UBC.github.io/blob/master/course-admin/history/STAT545-registered-students-all-time-anonymized.csv)
