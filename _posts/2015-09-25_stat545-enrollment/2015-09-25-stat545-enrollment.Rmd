@@ -4,6 +4,7 @@ output:
         keep_md: yes
 ---
 ---
+layout: post
 title: "STAT545A enrollment"
 author: "csiu"
 date: "2015-09-27"
