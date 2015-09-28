@@ -111,9 +111,16 @@ colnames(datanormP) <- c("Program", "Subject", "Value")
 ggplot(datanormP, aes(x=Program, y=Value, fill=Subject)) +
   geom_bar(stat="identity", color="black") + 
   xlab("") +
-  ylab("Subject proportion") + 
+  ylab("Proportion of students") + 
+  ggtitle("Enrollment to STAT 545A") +
   scale_fill_discrete(guide = guide_legend(reverse=TRUE)) +
-  theme(axis.text.y = element_blank())
+  theme(panel.border = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks.x = element_line(colour="grey90"),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank()
+        )
 ```
 
 ----
