@@ -1,5 +1,5 @@
 ---
-title: "STAT545 enrollment"
+title: "STAT545A enrollment"
 author: "csiu"
 date: "September 25, 2015"
 output:
@@ -10,7 +10,15 @@ output:
 knitr::opts_chunk$set(fig.align='center')
 ```
 
-As part of my education in graduate school, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io). Here we learn data wrangling, exploration, and analysis with R.
+----
+
+Currently, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io), where students are introduced to data wrangling, exploration, and analysis with R. 
+
+## The data
+
+The instructor ([Jenny Bryan](https://twitter.com/JennyBryan)) recently compiled and made public (as a means to encourage and inspire our own data exploration) some enrollment details of students to this course.
+
+- **[DATASET]**: [Enrollment to STAT 545A in 2015 by degree and program](https://gist.github.com/jennybc/924fe242a31e0239762f#file-2015_stat545_enrollment-csv)
 
 ```{r, echo=FALSE}
 library(tidyr)
@@ -22,9 +30,8 @@ library(plyr)
 data <- read.delim('data/2015_STAT545_enrollment.csv', sep=",")
 ```
 
-The instructor, [\@JennyBryan](https://twitter.com/JennyBryan), recently compiled a CSV of [enrollment in STAT 545A in 2015 by degree and program](https://gist.github.com/jennybc/924fe242a31e0239762f#file-2015_stat545_enrollment-csv). And I decided to do some exploration of this data. Pictorially (in a heatmap), the raw data looks like the following: 
+I, for one, was interested. I wanted to see what the data looks like and what stories it might reveal about my peers and I. Pictorially, the raw data looks like the following: 
 
-### Statistics, statistics, statistics
 ```{r, echo=FALSE, dev="png", dpi=340, out.width="604px"}
 databysubject <- gather(data, Program, Count, -Subject)
 ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
@@ -46,9 +53,9 @@ ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
         )
 ```
 
-This heatmap, orded by number of students per program, shows that most students taking this course belong to Statistics. This doesn't come as too much of surprise since the course is provided by the Statistics department e.g. **STAT** 545A. As a Bioinformatics student, we are representing third place.
+This heatmap, ordered by the total number of students per program, represents the `r sum(data$Total)` students enrolled to STAT 545A this year. It shows that most students taking this course belong to Statistics (`r sprintf('%0.1f%%', data[data$Subject == "Statistics",]$Total / sum(data$Total) * 100)`), which does not come as too much of surprise since the course (i.e. **STAT** 545A) is provided by the Department of Statistics. As a Bioinformatics student, we are representing third place (`r sprintf('%0.1f%%', data[data$Subject == "Bioinformatics",]$Total / sum(data$Total) * 100)`).
 
-### Mostly Masters students
+## Mostly Masters students and 2 BSc students
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
 databyprogram <- data.frame(Count=colSums(data[,c("BSC", "Masters", "PHD")]))
 ggplot(databyprogram,
@@ -64,9 +71,10 @@ ggplot(databyprogram,
         )
 ```
 
-Looking at the data differently, we see that there is twice as many Masters students than PHD students. There is also 20x more Masters students than BSC students. STAT 545 is a graduate course, so it makes sense there is less BSC students.
+Looking at the data differently, we see that there is twice as many Masters students than PHD students. We can also see there are 2 BSC students enrolled in this graduate course.
 
-## Other figures
+## The PhDs
+
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
 dnormS <- with(data, 
               cbind(Subject, 
@@ -85,6 +93,9 @@ ggplot(datanorm, aes(x=Subject, y=Count, fill=Program)) +
   coord_flip() #+ theme(legend.position="top")
 ```
 
+Normalizing the data across subjects, we see that from Economics, Psychology, Geography, and Physics only PhD students are enrolled. 
+
+## Other
 
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px", fig.height=6.5}
 datanormP <- t(data[,c("BSC", "Masters", "PHD")])
