@@ -15,4 +15,4 @@ github_username:  csiu
 markdown: kramdown
 paginate: 5
 paginate_path: "/archives/page/:num"
-exclude: ["README.md"]
+exclude: ["README.md", "_posts/*Rmd", "_posts/*html"]
