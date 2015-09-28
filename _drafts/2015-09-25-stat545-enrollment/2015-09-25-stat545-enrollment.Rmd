@@ -14,7 +14,7 @@ knitr::opts_chunk$set(fig.align='center')
 
 Currently, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io), where students are introduced to data wrangling, exploration, and analysis with R. 
 
-## The data
+## The data: 60 students
 
 The instructor ([Jenny Bryan](https://twitter.com/JennyBryan)) recently compiled and made public (as a means to encourage and inspire our own data exploration) some enrollment details of students to this course.
 
@@ -53,9 +53,9 @@ ggplot(subset(databysubject, subset = (databysubject$Program != "Total")),
         )
 ```
 
-This heatmap, ordered by the total number of students per program, represents the `r sum(data$Total)` students enrolled to STAT 545A this year. It shows that most students taking this course belong to Statistics (`r sprintf('%0.1f%%', data[data$Subject == "Statistics",]$Total / sum(data$Total) * 100)`), which does not come as too much of surprise since the course (i.e. **STAT** 545A) is provided by the Department of Statistics. As a Bioinformatics student, we are representing third place (`r sprintf('%0.1f%%', data[data$Subject == "Bioinformatics",]$Total / sum(data$Total) * 100)`).
+This heatmap, ordered by the total number of students per program, represents the `r sum(data$Total)` students enrolled to STAT 545A this year. It shows that most students taking this course belong to Statistics (`r sprintf('%0.1f%%', data[data$Subject == "Statistics",]$Total / sum(data$Total) * 100)`), which is unsurprising since the course (i.e. **STAT** 545A) is provided by the Department of Statistics. As a Bioinformatics student, we are representing third place (`r sprintf('%0.1f%%', data[data$Subject == "Bioinformatics",]$Total / sum(data$Total) * 100)`).
 
-## Mostly Masters students and 2 BSc students
+## Mostly Masters plus 2 BSc students
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
 databyprogram <- data.frame(Count=colSums(data[,c("BSC", "Masters", "PHD")]))
 ggplot(databyprogram,
@@ -71,9 +71,9 @@ ggplot(databyprogram,
         )
 ```
 
-Looking at the data differently, we see that there is twice as many Masters students than PHD students. We can also see there are 2 BSC students enrolled in this graduate course.
+Looking at the data differently, we see that there is twice as many Masters students (me) than PHD students (not me). We can also see there are 2 BSC students enrolled in this graduate course.
 
-## The PhDs
+## PhDs from Geography and Oceanography 
 
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
 dnormS <- with(data, 
@@ -93,9 +93,9 @@ ggplot(datanorm, aes(x=Subject, y=Count, fill=Program)) +
   coord_flip() #+ theme(legend.position="top")
 ```
 
-Normalizing the data across subjects, we see that from Economics, Psychology, Geography, and Physics only PhD students are enrolled. 
+Normalizing the data across subjects, we see that from Economics, Psychology, Geography, Oceanography, and Physics only PhD students are enrolled.
 
-## Other
+## Diversity of students
 
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px", fig.height=6.5}
 datanormP <- t(data[,c("BSC", "Masters", "PHD")])
@@ -112,7 +112,7 @@ ggplot(datanormP, aes(x=Program, y=Value, fill=Subject)) +
   geom_bar(stat="identity", color="black") + 
   xlab("") +
   ylab("Proportion of students") + 
-  ggtitle("Enrollment to STAT 545A") +
+  ggtitle("") +
   scale_fill_discrete(guide = guide_legend(reverse=TRUE)) +
   theme(panel.border = element_blank(),
         panel.grid.major.y = element_blank(),
@@ -123,42 +123,5 @@ ggplot(datanormP, aes(x=Program, y=Value, fill=Subject)) +
         )
 ```
 
-----
-
-## Past
-
-Also provided is [STAT 545 enrollment data from the past](https://github.com/STAT545-UBC/STAT545-UBC.github.io/blob/master/course-admin/history/STAT545-registered-students-all-time-anonymized.csv)
-
-```{r, echo=FALSE}
-pastdata <- read.delim('data/STAT545-registered-students-all-time-anonymized.csv', 
-                       sep=',', na.strings="")
-
-pastdata$Program <- factor(pastdata$Program, exclude=NULL)
-pastdata$year <- as.factor(pastdata$year)
-```
-
-```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
-ggplot(pastdata, aes(x=year, color=Gender)) + 
-  geom_bar() + 
-  xlab("") + 
-  ylab("Number of enrolled students") +
-  scale_color_discrete(guide = guide_legend(reverse=TRUE)) +
-  theme(panel.grid.major.x = element_blank())
-```
-
-### Enrollment by gender
-
-```{r echo=FALSE, dev="png", dpi=340, out.width="650px", fig.width=10, fig.height=7, warning=FALSE}
-ggplot(pastdata, aes(x=Program, fill=Gender)) +
-  geom_bar(subset=.(Gender=="Female")) +
-  geom_bar(subset=.(Gender=="Male"), aes(y = ..count.. * (-1))) +
-  scale_x_discrete(limits = rev(names(sort(table(pastdata$Program)))) ) + 
-  scale_y_continuous(breaks=seq(-60,40,10), labels=abs(seq(-60,40,10))) +
-  xlab("") +
-  ylab("Enrollment by gender") +
-  coord_flip() +
-  theme(
-    axis.text.y = element_text(colour="black")
-  )
-```
+Data science is multidisciplinary and this is exemplified by the diverse enrollment of students to STAT 545A during this year.
 
