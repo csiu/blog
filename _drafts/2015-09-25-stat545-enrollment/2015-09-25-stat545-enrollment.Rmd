@@ -66,6 +66,47 @@ ggplot(databyprogram,
 
 Looking at the data differently, we see that there is twice as many Masters students than PHD students. There is also 20x more Masters students than BSC students. STAT 545 is a graduate course, so it makes sense there is less BSC students.
 
+## Other figures
+```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
+dnormS <- with(data, 
+              cbind(Subject, 
+                    data[,c("BSC", "Masters", "PHD")] / Total))
+ord <- hclust(dist(data.frame(dnormS[,c("BSC", "Masters", "PHD")]), 
+                   method="euclidean"),
+              method="ward.D")$order
+
+datanorm <- gather(dnormS, Program, Count, -Subject)
+
+ggplot(datanorm, aes(x=Subject, y=Count, fill=Program)) +
+  geom_bar(stat="identity") + 
+  scale_x_discrete(limits = as.character(data$Subject)[ord]) +
+  xlab("") +
+  ylab("") +
+  coord_flip() #+ theme(legend.position="top")
+```
+
+
+```{r, echo=FALSE, dev="png", dpi=140, out.width="540px", fig.height=6.5}
+datanormP <- t(data[,c("BSC", "Masters", "PHD")])
+datanormP <- datanormP / rowSums(datanormP)
+
+colnames(datanormP) <- data$Subject
+datanormP <- data.frame(Program=rownames(datanormP), datanormP)
+datanormP <- datanormP[, order(names(datanormP), decreasing=TRUE)]
+
+datanormP <- gather(datanormP, Program)
+colnames(datanormP) <- c("Program", "Subject", "Value")
+
+ggplot(datanormP, aes(x=Program, y=Value, fill=Subject)) +
+  geom_bar(stat="identity", color="black") + 
+  xlab("") +
+  ylab("Subject proportion") + 
+  scale_fill_discrete(guide = guide_legend(reverse=TRUE)) +
+  theme(axis.text.y = element_blank())
+```
+
+----
+
 ## Past
 
 Also provided is [STAT 545 enrollment data from the past](https://github.com/STAT545-UBC/STAT545-UBC.github.io/blob/master/course-admin/history/STAT545-registered-students-all-time-anonymized.csv)
