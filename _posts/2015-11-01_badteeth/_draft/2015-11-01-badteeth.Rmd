@@ -1,0 +1,204 @@
+---
+output:
+    html_document:
+        keep_md: yes
+---
+---
+title: "Bad teeth"
+author: "csiu"
+date: "November 1, 2015"
+layout: post
+category: update
+---
+```{r echo=FALSE}
+## Libs
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(rworldmap))
+library(classInt)
+library(viridis)
+library(ggplot2)
+
+## Options
+knitr::opts_chunk$set(fig.path='/Users/csiu/project/blog/myblog/img/figure/2015-11-01/',
+                      fig.align='center',
+                      echo=FALSE)
+options(knitr.table.format = 'markdown')
+
+## Helper functions
+headtail <- function(dat, n=5){
+  dotdotdot <- head(dat, 1)
+  dotdotdot[,] <- "..."
+
+  rbind(head(dat, n),
+        dotdotdot,
+        tail(dat, n)
+        )
+}
+```
+
+Halloween was yesterday. And this means that kids will be sorting their candies into piles of joy and despair. One such ranking is the [2015 Candy Hierarchy](http://boingboing.net/2015/10/31/the-candy-hierarchy-2015-your.html), where any full-sized candy bar brings the most joy and a broken glow stick brings the most despair.
+
+On the other hand, I -- someone who did not go trick-or-treating -- will be looking at the bad teeth per child (12 yr) in 2004 dataset from [gapminder.org](http://www.gapminder.org/data/). *Note: there was no other more recent bad teeth data besides those of 2004 and as such this was the data to be analyzed in this post.* Additionally, in the process of tidying this data, I also added columns for regional information from [lukes' SO-3166-Countries-with-Regional-Codes ](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv); the tidied dataset can be found at:
+
+- **[DATASET]**: [Average number of bad teeth per child (12 yr) in 2004 with regional information](https://gist.github.com/csiu/832bc51d373ce65e6a04#file-indicator-who-bad_teeth-regions-tsv)
+
+```{r}
+datafile <- "https://gist.githubusercontent.com/csiu/832bc51d373ce65e6a04/raw/24d76674b063a1082d5870a2b8f908f3c9a69d50/indicator-who-bad_teeth-regions.tsv"
+
+dat <- read.delim(datafile)
+```
+
+## Top and bottom 5 countries for bad teeth
+In this dataset there are `r nrow(dat)` countries with the number of bad teeth ranging from `r max(dat$bad_teeth)` to `r min(dat$bad_teeth)`. The top and bottom 5 countries with the highest and lowest average number of bad teeth per child is given in the following table:
+
+```{r}
+dat2 <- dat %>%
+  select(country, bad_teeth, continent = region, sub_region = sub.region) %>%
+  mutate(rank = dense_rank(desc(bad_teeth))) %>%
+  arrange(rank)
+
+dat2 %>%
+  headtail() %>%
+  select(country, rank, badTeeth = bad_teeth) %>%
+  knitr::kable()
+```
+
+## Bad teeth per child around the world
+```{r world-badteeth, fig.width=8, fig.height=6, warning=FALSE, results='hide'}
+numCats <- 6
+category <- "bad_teeth"
+maptitle <- "Average number of bad teeth per child (12 yr) in 2004"
+
+sPDF <- joinCountryData2Map(dat,
+                            joinCode="ISO_A3",
+                            nameJoinColumn="alpha.3",
+                            mapResolution="li",
+                            verbose=TRUE)
+
+#getting class intervals
+classInt <- classIntervals(sPDF[[category]],
+                           n=numCats, style = "jenks")
+catMethod <- classInt[["brks"]]
+
+#getting colours
+colourPalette <- rev(magma(numCats))
+
+#plot map
+#mapDevice() #create world map shaped window
+mapParams <- mapCountryData(sPDF,
+                            nameColumnToPlot=category,
+                            numCats=numCats,
+                            catMethod=catMethod,
+                            colourPalette=colourPalette,
+                            addLegend=FALSE,
+                            mapTitle=maptitle
+                            )
+
+#adding legend
+do.call(addMapLegend,
+        c(mapParams,
+          legendLabels="all",
+          legendWidth=1,
+          legendIntervals="data",
+          legendMar = 4))
+```
+
+When we plot the bad teeth count on a map, we see that there are more bad teeth in South America than North America, more bad teeth in Canada than the US, and the presence of different localized bad teeth ranges across Africa.
+
+## Bad teeth by continent
+```{r denbox-continent, fig.width=7.5}
+gg_den <- dat2 %>%
+  ggplot(aes(x = bad_teeth,
+             color = continent
+             )) +
+  geom_density() +
+  scale_x_continuous(breaks = 1:6) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  xlab("Average number of bad teeth in 2004") +
+  ylab("Density") +
+  coord_flip()
+
+gg_box <- dat2 %>%
+  ggplot(aes(x = reorder(continent, bad_teeth, function(x){-median(x)}),
+             y = bad_teeth,
+             color = continent)) +
+  geom_boxplot() +
+  scale_y_continuous(breaks = 1:6) +
+  ylab("") +
+  xlab("") +
+  theme_bw() +
+  theme(
+    #legend.position = "none",
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+cowplot::plot_grid(gg_den, gg_box, align = "h", labels = c("A", "B"))
+```
+
+When we group the average number of bad teeth per 12 year old child per country by continent and sort by the median value (Fig. B), we see the worst teeth are in Europe and the Americas, okay teeth are in Asia or Oceania, and the best teeth are in Africa.
+
+```{r dotplot-badteeth, fig.width=6, fig.height=14, include=FALSE, eval=FALSE}
+dat2 %>%
+  ggplot(aes(x = reorder(country, bad_teeth, function(x){-x}),
+             y = bad_teeth,
+             color = continent)) +
+  geom_point() +
+  scale_y_continuous(breaks = 1:6) +
+  ylab("") +
+  xlab("") +
+  theme_bw() +
+  theme(
+    axis.text.y = element_text(size = 6)
+    #axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size=6),
+    #legend.justification = c(1, 1), legend.position = c(1, 1)
+  ) +
+  coord_flip()
+```
+
+## Bad teeth by subregion
+```{r boxplot-subregion, fig.width=7.5}
+dat2 %>%
+  ggplot(aes(x=reorder(sub_region, bad_teeth, function(x){-median(x)}),
+             y=bad_teeth,
+             fill = continent
+             )) +
+  geom_boxplot() +
+  scale_y_continuous(breaks = 1:6) +
+  #stat_summary(fun.y = median, geom = "point", color = "red", size = 4, alpha = 0.6) +
+  xlab("") +
+  ylab("Average number of bad teeth in 2004") +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size=6)
+  )
+```
+
+If instead we group the average number of bad teeth per 12 year old child per country by subregion and sort by the median value, we see a different story e.g. bad teeth in Europe greatly differs between Western Europe (e.g. have more good teeth) and Eastern Europe (e.g. have more bad teeth); Northern America has more good teeth than South America; and the teeth quality of Asian subregions are pretty consistent.
+
+```{r}
+m1 <- dat2 %>%
+  group_by(continent) %>%
+  summarise(median_badteeth_from_continent = median(bad_teeth))
+
+m2 <- dat2 %>%
+  group_by(sub_region, continent) %>%
+  summarise(median_badteeth = median(bad_teeth)) %>%
+  group_by(continent) %>%
+  summarise(median_badteeth_from_subregion = median(median_badteeth))
+
+inner_join(m1, m2, by = "continent") %>%
+  arrange(desc(median_badteeth_from_subregion)) %>%
+  mutate(rank_subregion = min_rank(desc(median_badteeth_from_subregion)),
+         rank_continent = min_rank(desc(median_badteeth_from_continent))) %>%
+  select(continent,
+         median = median_badteeth_from_continent,
+         medianRank = rank_continent,
+         medianSubregion = median_badteeth_from_subregion,
+         medianSubregionRank = rank_subregion) %>%
+  knitr::kable()
+```
+
+When we consider the teeth quality across continents at the subregional level, the ranks of the calculated median of bad teeth in a continent's subregions (`medianSubregionRank`) differs from the calculated median of bad teeth in a continent's countries (`medianRank`). Here we see the worst teeth are in the Americas and Asia, okay teeth are in Europe and Oceania, and the best teeth are again in Africa.
+
+Overall, it seems that on average Africa has the best teeth in children of 12 years of age in 2004.
