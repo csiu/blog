@@ -1,0 +1,129 @@
+---
+output: 
+    html_document:
+        keep_md: yes
+---
+---
+layout: post
+author: "csiu"
+date: `r format(Sys.Date())`
+title: "Attendance in STAT547M"
+categories: update
+---
+```{r include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,
+                      results='hide',
+                      fig.retina = 2,
+                      fig.path='/Users/csiu/project/blog/myblog/img/figure/tmp/')
+options(knitr.table.format = 'markdown')
+```
+
+```{r }
+library(readr)
+suppressPackageStartupMessages(library(dplyr))
+library(tidyr)
+suppressPackageStartupMessages(library(scales))
+library(ggplot2)
+library(viridis)
+
+evalstring <- function(x){
+  if (length(x) == 1){
+    eval(parse(text=x))  
+  } else {
+    unlist(lapply(x, function(i){eval(parse(text=i))}))  
+  }
+}
+```
+
+```{r results='hide'}
+(dat <- read_delim("/Users/csiu/tmp/attendence.txt", "\t") %>% 
+  tbl_df()) %>% 
+  knitr::kable()
+
+(dat <- dat %>% 
+  mutate(
+    row_1 = evalstring(row_1),
+    row_2 = evalstring(row_2),
+    row_3 = evalstring(row_3),
+    row_4 = evalstring(row_4),
+    row_5 = evalstring(row_5),
+    total = row_1 + row_2 + row_3 + row_4 + row_5
+  )) %>% 
+  knitr::kable()
+```
+
+## Attendance is high  in the first weeek
+Here we plot the total number of students (including TAs) in attendance for each day of the course.
+
+```{r}
+dat %>% 
+  ggplot(aes(x = date, y = total)) +
+  geom_point(size = 4, color = "red") +
+  scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
+  xlab("") +
+  ylab("Total number of students") +
+  theme_bw()
+```
+
+As expected, attendance in the first week is high. We can also see that there is more attendance in the Tuesday (where new material is introduced) than the Thursday (where the Tuesday material is expanded) class. 
+
+```{r}
+dat %>% 
+  mutate(x = 1) %>% 
+  group_by(x) %>% 
+  summarise(
+    r1_avg = mean(row_1),
+    r2_avg = mean(row_2),
+    r3_avg = mean(row_3),
+    r4_avg = mean(row_4),
+    r5_avg = mean(row_5),
+    total_avg = mean(total)
+  ) %>% 
+  select(-x)
+```
+
+## Most people sit in the second and back rows
+In the classroom, there are 5 rows. Here we plot the number of students in each row for each day. We also included the average number of students per row per day.
+
+```{r}
+nrows <- sum(grepl("^row_", colnames(dat)))
+dat %>% 
+  gather(Row, Count, starts_with("row")) %>% 
+  ggplot(aes(x = date, y = Count)) + 
+  geom_line(aes(color = Row, linetype = Row)) +
+  scale_color_manual(
+    values = rev(viridis(nrows)), 
+    labels=c("front", "row 2", "row 3", "row 4", "back")
+  ) +
+  scale_linetype_discrete(
+    labels=c("front", "row 2", "row 3", "row 4", "back")
+  ) +
+  scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
+  stat_summary(fun.y = mean, geom = "point", size = 4) + 
+  xlab("") +
+  ylab("Average number of students") +
+  theme_bw()
+
+```
+
+From this graph, it looks like students prefer to sit in the second row (as opposed to the front). Furthermore, sitting in the back row is an attractive option.
+
+```{r eval=FALSE}
+fileName <- sprintf('../_posts/%s-TMP-attendance.md', format(Sys.Date()))
+file.rename(from="attendance.md", 
+            to=fileName)
+
+singleString <- readChar(fileName, file.info(fileName)$size) %>%
+  gsub("!\\[\\]\\(/Users/csiu/project/blog/myblog(/img.*?png)\\)", 
+       '<img src="{{ site.baseurl }}\\1" title="" alt="" style="display: block; margin: auto;" />',
+       .) %>% 
+   gsub("/Users/csiu/project/blog/myblog", 
+       '{{ site.baseurl }}',
+       .) 
+
+fileConn<-file(fileName)
+writeLines(singleString, fileConn)
+close(fileConn)
+
+#servr::jekyll(dir = "..")
+```
