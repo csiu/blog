@@ -21,6 +21,7 @@ library(ggplot2)
 ## Options
 knitr::opts_chunk$set(fig.path='/Users/csiu/project/blog/myblog/img/figure/2015-11-01/',
                       fig.align='center',
+                      fig.retina = 2,
                       echo=FALSE)
 options(knitr.table.format = 'markdown')
 
