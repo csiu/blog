@@ -9,6 +9,7 @@ title: "STAT545A enrollment"
 author: "csiu"
 date: "2015-09-27"
 category: update
+tags: data-analysis
 ---
 ```{r img-setup, include=FALSE, cache=FALSE}
 fig.dir <- 'img/figure/2015-09-27/'
