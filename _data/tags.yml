@@ -1,4 +1,6 @@
-- slug: setup
+setup:
+  slug: setup
   name: Setup
-- slug: data-analysis
+data-analysis:
+  slug: data-analysis
   name: Data analysis
