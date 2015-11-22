@@ -3,7 +3,7 @@ layout: default
 ---
 {% assign post = page %}
 {% if post.tags.size > 0 %}
-    {% capture tags_content %}Posted with {% if post.tags.size == 1 %}<i class="fa fa-tag"></i>{% else %}<i class="fa fa-tags"></i>{% endif %}: {% endcapture %}
+    {% capture tags_content %}{% if post.tags.size == 1 %}<i class="fa fa-tag"></i>{% else %}<i class="fa fa-tags"></i>{% endif %} with: {% endcapture %}
     {% for post_tag in post.tags %}
         {% assign tag = site.data.tags[post_tag] %}
         {% if tag %}
@@ -25,8 +25,7 @@ layout: default
           {% if page.subtitle %}
           <h2 class="subheading">{{ page.subtitle }}</h2>
           {% endif %}
-          <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
-          <p id="post-meta">{{ tags_content }}</p>
+          <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }} | {{ tags_content }}</span>
         </div>
       </div>
     </div>
