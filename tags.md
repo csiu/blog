@@ -11,7 +11,7 @@ description: Find posts tagged with ...
     <span style='color: #aaa; font-family: Monaco, "Courier New", monospace; font-size: 60%;'>
       Tag »
     </span>
-    <a href="{{ site.baseurl }}/tags/{{ tag | first }}/index.html">
+    <a href="/tags/{{ tag | first }}">
       <u>{{ tag | first }}</u>
     </a>
   </li>
