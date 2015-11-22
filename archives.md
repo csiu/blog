@@ -30,6 +30,7 @@ description: "Previous posts"
         </span>
         <a href="{{ post.url }}/">{{ post.title }}</a>
 
+        {% if post.tags.size > 0 %}
         <br>
         <span style='color: #aaa; font-family: Monaco, "Courier New", monospace; font-size: 60%;'>
         Tagged with {% if post.tags.size == 1 %}<i class="fa fa-tag"></i>{% else %}<i class="fa fa-tags"></i>{% endif %}
@@ -38,6 +39,7 @@ description: "Previous posts"
             <font color="#aaa"><u>{{ tag }}</u></font>
           </a>
         {% endfor %}
+        {% endif %}
         </span>
 
       </div>
