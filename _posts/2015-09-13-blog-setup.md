@@ -4,6 +4,7 @@ author: csiu
 title: "Blog setup"
 date: 2015-09-13
 categories: update
+tags: setup
 header-img: img/home-bg.jpg
 ---
 For my first entry, it's only fitting to disclose how this blog was setup.

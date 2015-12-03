@@ -4,6 +4,31 @@ description: "csiu's blog"
 ---
 {% for post in paginator.posts %}
 <div class="post-preview">
+
+  {% if post.tags.size > 0 %}
+    {% capture tags_content %} | Tagged with: {% endcapture %}
+
+    {% for post_tag in post.tags %}
+      {% assign tag = site.data.tags[post_tag] %}
+      {% if tag %}
+        {% capture tags_content_temp %}{{ tags_content_tags }}<a href="/tag/{{ tag.slug }}/">{{ tag.name }}</a>{% if forloop.last == false %}, {% endif %}{% endcapture %}
+        {% assign tags_content_tags = tags_content_temp %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- for when post list tags not in _data/tags.yml -->
+    {% if tags_content_tags != %}
+      {% capture tags_content %}{{ tags_content }}{{ tags_content_tags }}{% endcapture %}
+      {% assign tags_content_tags = "" %}
+    {% else %}
+      {% assign tags_content = '' %}
+    {% endif %}
+
+  <!-- for when post have no tags -->
+  {% else %}
+    {% assign tags_content = '' %}
+  {% endif %}
+
   <a href="{{ post.url | prepend: site.baseurl }}">
     <h2 class="post-title">
       {{ post.title }}
@@ -17,7 +42,7 @@ description: "csiu's blog"
     {% endif %}
   </a>
   <p class="post-meta">
-    Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
+    Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}{{ tags_content }}
   </p>
 </div>
 <hr>

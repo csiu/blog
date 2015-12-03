@@ -9,6 +9,7 @@ title: "STAT545A enrollment"
 author: "csiu"
 date: "2015-09-27"
 category: update
+tags: data-analysis
 ---
 ```{r img-setup, include=FALSE, cache=FALSE}
 fig.dir <- 'img/figure/2015-09-27/'
@@ -16,7 +17,7 @@ knitr::opts_chunk$set(fig.align='center',
                       fig.path=fig.dir)
 ```
 
-Currently, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io), where students are introduced to data wrangling, exploration, and analysis with R. 
+Currently, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io), where students are introduced to data wrangling, exploration, and analysis with R.
 
 ## The data: 60 students
 
@@ -34,7 +35,7 @@ library(plyr)
 data <- read.delim('data/2015_STAT545_enrollment.csv', sep=",")
 ```
 
-I, for one, was interested. I wanted to see what the data looks like and what stories it might reveal about my peers and I. Pictorially, the raw data looks like the following: 
+I, for one, was interested. I wanted to see what the data looks like and what stories it might reveal about my peers and I. Pictorially, the raw data looks like the following:
 
 ```{r, echo=FALSE, dev="png", dpi=340, out.width="604px"}
 databysubject <- gather(data, Program, Count, -Subject)
@@ -77,20 +78,20 @@ ggplot(databyprogram,
 
 Looking at the data differently, we see that there is twice as many Masters students (me) than PHD students (not me). We can also see there are 2 BSC students enrolled in this graduate course.
 
-## PhDs from Geography and Oceanography 
+## PhDs from Geography and Oceanography
 
 ```{r, echo=FALSE, dev="png", dpi=140, out.width="540px"}
-dnormS <- with(data, 
-              cbind(Subject, 
+dnormS <- with(data,
+              cbind(Subject,
                     data[,c("BSC", "Masters", "PHD")] / Total))
-ord <- hclust(dist(data.frame(dnormS[,c("BSC", "Masters", "PHD")]), 
+ord <- hclust(dist(data.frame(dnormS[,c("BSC", "Masters", "PHD")]),
                    method="euclidean"),
               method="ward.D")$order
 
 datanorm <- gather(dnormS, Program, Count, -Subject)
 
 ggplot(datanorm, aes(x=Subject, y=Count, fill=Program)) +
-  geom_bar(stat="identity") + 
+  geom_bar(stat="identity") +
   scale_x_discrete(limits = as.character(data$Subject)[ord]) +
   xlab("") +
   ylab("") +
@@ -113,9 +114,9 @@ datanormP <- gather(datanormP, Program)
 colnames(datanormP) <- c("Program", "Subject", "Value")
 
 ggplot(datanormP, aes(x=Program, y=Value, fill=Subject)) +
-  geom_bar(stat="identity", color="black") + 
+  geom_bar(stat="identity", color="black") +
   xlab("") +
-  ylab("Proportion of students") + 
+  ylab("Proportion of students") +
   ggtitle("") +
   scale_fill_discrete(guide = guide_legend(reverse=TRUE)) +
   theme(panel.border = element_blank(),

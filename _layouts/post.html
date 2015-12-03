@@ -1,6 +1,31 @@
 ---
 layout: default
 ---
+{% assign post = page %}
+{% if post.tags.size > 0 %}
+  {% capture tags_content %} | {% if post.tags.size == 1 %}<i class="fa fa-tag"></i>{% else %}<i class="fa fa-tags"></i>{% endif %} with: {% endcapture %}
+
+  {% for post_tag in post.tags %}
+    {% assign tag = site.data.tags[post_tag] %}
+    {% if tag %}
+      {% capture tags_content_temp %}{{ tags_content_tags }}<a href="/tag/{{ tag.slug }}/">{{ tag.name }}</a>{% if forloop.last == false %}, {% endif %}{% endcapture %}
+      {% assign tags_content_tags = tags_content_temp %}
+    {% endif %}
+  {% endfor %}
+
+  <!-- for when post list tags not in _data/tags.yml -->
+  {% if tags_content_tags != %}
+    {% capture tags_content %}{{ tags_content }}{{ tags_content_tags }}{% endcapture %}
+    {% assign tags_content_tags = "" %}
+  {% else %}
+    {% assign tags_content = '' %}
+  {% endif %}
+
+  <!-- for when post have no tags -->
+{% else %}
+  {% assign tags_content = '' %}
+{% endif %}
+
 <!-- Post Header -->
 <header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
   <div class="container">
@@ -11,7 +36,7 @@ layout: default
           {% if page.subtitle %}
           <h2 class="subheading">{{ page.subtitle }}</h2>
           {% endif %}
-          <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+          <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}{{ tags_content }}</span>
         </div>
       </div>
     </div>

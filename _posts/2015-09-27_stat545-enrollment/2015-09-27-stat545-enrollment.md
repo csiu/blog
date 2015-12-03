@@ -4,6 +4,7 @@ title: "STAT545A enrollment"
 author: "csiu"
 date: "2015-09-27"
 category: update
+tags: data-analysis
 ---
 
 Currently, I'm enrolled in [STAT 545A: Exploratory Data Analysis](https://stat545-ubc.github.io), where students are introduced to data wrangling, exploration, and analysis with R.

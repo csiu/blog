@@ -9,6 +9,7 @@ author: "csiu"
 date: "November 1, 2015"
 layout: post
 category: update
+tags: data-analysis
 ---
 ```{r echo=FALSE}
 ## Libs
