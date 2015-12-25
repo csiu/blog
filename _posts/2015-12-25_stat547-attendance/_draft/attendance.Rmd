@@ -36,7 +36,7 @@ evalstring <- function(x){
 ```
 
 ```{r results='hide'}
-(dat <- read_delim("/Users/csiu/tmp/attendence.txt", "\t") %>% 
+(dat <- read_delim("https://gist.githubusercontent.com/csiu/71b3db027ec892018afe/raw/stat547m-attendance.tsv", "\t") %>% 
   tbl_df()) %>% 
   knitr::kable()
 
