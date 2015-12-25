@@ -53,7 +53,7 @@ evalstring <- function(x){
 ```
 
 ## Attendance is high  in the first weeek
-Here we plot the total number of students (including TAs) in attendance for each day of the course.
+Here we plot the total number of people in attendance (including students + TAs) for each day of the course.
 
 ```{r}
 dat %>% 
@@ -62,7 +62,10 @@ dat %>%
   scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
   xlab("") +
   ylab("Total number of students") +
-  theme_bw()
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
 As expected, attendance in the first week is high. We can also see that there is more attendance in the Tuesday (where new material is introduced) than the Thursday (where the Tuesday material is expanded) class. 
@@ -102,7 +105,10 @@ dat %>%
   stat_summary(fun.y = mean, geom = "point", size = 4) + 
   xlab("") +
   ylab("Average number of students") +
-  theme_bw()
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 
 ```
 
