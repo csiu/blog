@@ -1,22 +1,11 @@
 ---
-output: 
-    html_document:
-        keep_md: yes
----
----
 layout: post
 author: "csiu"
-date: `r format(Sys.Date())`
+date: 2015-12-25
 title: "Attendance in STAT547M"
 categories: update
 ---
-```{r include=FALSE}
-knitr::opts_chunk$set(echo=FALSE,
-                      results='hide',
-                      fig.retina = 2,
-                      fig.path='/Users/csiu/project/blog/myblog/img/figure/2015-12-25/')
-options(knitr.table.format = 'markdown')
-```
+
 
 In this post, I would like to share the [attendance in STAT 547M](https://gist.github.com/csiu/71b3db027ec892018afe) dataset that I created as part of my "*I wonder how many people are taking this class*" <strike>thought</strike> experiment.
 
@@ -35,55 +24,14 @@ STAT 547M is the second half of the [STAT 545A and STAT 547M: Data wrangling, ex
 - week 5: getting data from the web
 - week 6: building Shiny apps
 
-```{r }
-library(readr)
-suppressPackageStartupMessages(library(dplyr))
-library(tidyr)
-suppressPackageStartupMessages(library(scales))
-library(ggplot2)
-library(viridis)
 
-evalstring <- function(x){
-  if (length(x) == 1){
-    eval(parse(text=x))  
-  } else {
-    unlist(lapply(x, function(i){eval(parse(text=i))}))  
-  }
-}
-```
 
-```{r results='hide'}
-(dat <- read_delim("https://gist.githubusercontent.com/csiu/71b3db027ec892018afe/raw/stat547m-attendance.tsv", "\t") %>% 
-  tbl_df()) %>% 
-  knitr::kable()
 
-(dat <- dat %>% 
-  mutate(
-    row_1 = evalstring(row_1),
-    row_2 = evalstring(row_2),
-    row_3 = evalstring(row_3),
-    row_4 = evalstring(row_4),
-    row_5 = evalstring(row_5),
-    total = row_1 + row_2 + row_3 + row_4 + row_5
-  )) %>% 
-  knitr::kable()
-```
 
 ## Attendance is high  in the first weeek
 Here we plot the total number of people in attendance (including students + TAs) for each day of the course.
 
-```{r attendance}
-dat %>% 
-  ggplot(aes(x = date, y = total)) +
-  geom_point(size = 4, color = "red") +
-  scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
-  xlab("") +
-  ylab("Total number of students") +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-```
+<img src="{{ site.baseurl }}/img/figure/2015-12-25/attendance-1.png" title="" alt="" width="672" />
 
 As expected, attendance in the first week is high. We can also see that there is more attendance on Tuesdays (where new material is introduced) than Thursdays (where the Tuesday material is expanded).
 
@@ -91,72 +39,17 @@ Besides the first week, week 3 -- building your first R package -- was also rela
 
 It is also interesting to see that there was the fewest number of students in attendance in the last class when we learned about building a Shiny app.
 
-```{r}
-dat %>% 
-  mutate(x = 1) %>% 
-  group_by(x) %>% 
-  summarise(
-    r1_avg = mean(row_1),
-    r2_avg = mean(row_2),
-    r3_avg = mean(row_3),
-    r4_avg = mean(row_4),
-    r5_avg = mean(row_5),
-    total_avg = mean(total)
-  ) %>% 
-  select(-x)
-```
+
 
 ## Most people sit on the right side of the room
-```{r byside}
-(datLR <- read_delim("https://gist.githubusercontent.com/csiu/71b3db027ec892018afe/raw/stat547m-attendance.tsv", "\t") %>% 
-  tbl_df()) %>% 
-  filter(grepl('\\+', row_1)) %>% 
-  gather(Row, v, starts_with('row')) %>% 
-  separate(v, into = c('L', 'R'), sep="\\+", convert = TRUE) %>% 
-  group_by(date) %>% 
-  summarise(Left = sum(L),
-            Right = sum(R)) %>% 
-  gather(Side,count,-date) %>% 
-  ggplot(aes(x=date, y=count, group=Side, fill=Side, color=Side)) +
-  geom_point(size=3, alpha=0.6) + 
-  geom_line() +
-  scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
-  xlab("") +
-  ylab("Number of students") +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-```
+<img src="{{ site.baseurl }}/img/figure/2015-12-25/byside-1.png" title="" alt="" width="672" />
 
 When we plot the number of people sitting on the left vs right side of the room, we see that most people tend to sit on the right (a.k.a. the professor's left). This phenomena might be because out of the two doors leading to opposite sides of the classroom, the door leading to the right side is closer to the stairway which leads to the classroom i.e. the path of least resistance.
 
 ## Most people sit in the second and back rows
 In the classroom, there are 5 rows. Here we plot the number of students in each row for each day. We also included the average number of students per row per day as denoted by the black dots.
 
-```{r byrow}
-nrows <- sum(grepl("^row_", colnames(dat)))
-dat %>% 
-  gather(Row, Count, starts_with("row")) %>% 
-  ggplot(aes(x = date, y = Count)) + 
-  geom_line(aes(color = Row, linetype = Row)) +
-  scale_color_manual(
-    values = rev(viridis(nrows)), 
-    labels=c("front", "row 2", "row 3", "row 4", "back")
-  ) +
-  scale_linetype_discrete(
-    labels=c("front", "row 2", "row 3", "row 4", "back")
-  ) +
-  scale_x_date(breaks = dat$date, labels = date_format("%b %d")) +
-  stat_summary(fun.y = mean, geom = "point", size = 3) + 
-  xlab("") +
-  ylab("Number of students") +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-
-```
+<img src="{{ site.baseurl }}/img/figure/2015-12-25/byrow-1.png" title="" alt="" width="672" />
 
 From this graph, we see that:
 
