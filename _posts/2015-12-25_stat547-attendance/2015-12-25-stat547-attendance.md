@@ -4,6 +4,7 @@ author: "csiu"
 date: 2015-12-25
 title: "Attendance in STAT547M"
 categories: update
+tags: data-analysis
 header-img-http: https://images.unsplash.com/photo-1421906375741-f6bda4abe433?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=e9b3682c6237e28ffd641e8e825880c6
 ---
 
