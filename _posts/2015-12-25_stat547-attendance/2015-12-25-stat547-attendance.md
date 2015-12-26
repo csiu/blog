@@ -6,6 +6,7 @@ title: "Attendance in STAT547M"
 categories: update
 tags: data-analysis
 header-img-http: https://images.unsplash.com/photo-1421906375741-f6bda4abe433?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=e9b3682c6237e28ffd641e8e825880c6
+header-img-source: Chelsea Francis
 ---
 
 
@@ -68,6 +69,3 @@ Rationale/Conspiracy theory:
 - If you sit in the back row, you're probably not going to pay full attention to the lesson
 - If you sit in the back row, you're a TA (who -- now that I think about it -- kind of need to be in attendance) and need to spot the students who need help
 - If you sit in the back row, you got tired of sitting in the front row during nearly every class in undergrad and so now that you're a grad student (and realized that there was no point to being a keener) you're going to sit in the back row
-
----
-*Note: [header photo is by Chelsea Francis](https://unsplash.com/photos/OrgLz7cjFIc)*
