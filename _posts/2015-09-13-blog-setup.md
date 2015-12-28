@@ -6,6 +6,7 @@ date: 2015-09-13
 categories: update
 tags: setup
 header-img: img/home-bg.jpg
+header-img-source: Ryan McGuire
 ---
 For my first entry, it's only fitting to disclose how this blog was setup.
 Previously, I was aware that this can be done using [GitHub Pages](https://pages.github.com), but it was only this weekend that I decided to sit down and do this.
