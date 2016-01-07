@@ -24,8 +24,3 @@ with open(newfile, 'w') as out:
                          '{{ site.baseurl }}',
                          content)
         out.write(content)
-
-
-
-
-
