@@ -33,7 +33,7 @@ library(cowplot)
 theme_set(theme_bw())
 ```
 
-Yesterday I submitted a poster abstract to the [ISMB 2016 conference in Orlando, Florida](https://www.iscb.org/ismb2016). This submission -- submission #449 to category "Epigenetics"" -- was a late submission, which meant that the results of submissions from rounds 1 are done and accepted abstracts are [released/listed](https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php) onto the conference’s website.
+Yesterday I submitted a poster abstract to the [ISMB 2016 conference in Orlando, Florida](https://www.iscb.org/ismb2016). This submission -- submission #449 to category "Epigenetics"" -- was a late submission, which meant that the results of submissions from rounds 1 are done and accepted abstracts have been [released/listed](https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php) onto the conference’s website.
 
 *I was curious.*
 
@@ -108,7 +108,7 @@ categories %>%
     theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.5))
 ```
 
-Here we also see there is a total of 366 abstracts accepted as of Fri, May 6, 2016. From this total, only ~2.7% or 10 abstracts have been listed as "Epigenetics". 
+Here we also see -- as of Fri, May 6, 2016 -- there is a total of 366 abstracts accepted. From this total, only ~2.7% or 10 abstracts have been listed as "Epigenetics". 
 
 *Not bad news.*
 
