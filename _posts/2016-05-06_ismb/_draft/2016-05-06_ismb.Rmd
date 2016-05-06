@@ -76,7 +76,7 @@ get_titles <- function(cat_url){
 }
 ```
 
-And if we assume that people submit equally to all categories, we expect each category to contain 6.25% ($=\frac{100\%}{16}$) of the total number of abstracts.
+And if we assume that people submit equally to all categories, we expect each category to contain 6.25% (`100%/16`) of the total number of abstracts.
 
 ## Majority of posters are classified as "Sequence Analysis"
 
