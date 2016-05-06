@@ -64,9 +64,9 @@ categories <- read_html(main_url) %>%
   mutate(cat_url = sprintf("%s?cat=%s", main_url, id))) %>%
   mutate(
     Item = sprintf("%s.", row_number()),
-    `Category/Link to posters` = sprintf("[%s](%s)", category, cat_url)
+    `Category/Link to abstracts` = sprintf("[%s](%s)", category, cat_url)
   ) %>%
-  select(Item, `Category/Link to posters`, ID=id) %>%
+  select(Item, `Category/Link to abstracts`, ID=id) %>%
   knitr::kable()
 
 
