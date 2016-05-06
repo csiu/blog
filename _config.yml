@@ -14,6 +14,7 @@ stackoverflow_username: 2364901/csiu
 
 # Build settings
 markdown: kramdown
+gems: [jekyll-paginate]
 paginate: 5
 paginate_path: "/archives/page/:num"
 exclude: ["README.md", "_posts/*Rmd", "_posts/*html"]
