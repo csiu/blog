@@ -1,0 +1,114 @@
+---
+output:
+    html_document:
+        keep_md: yes
+---
+---
+layout: post
+author: "csiu"
+date: 2016-05-06
+title: "Posters submitted to ISMB"
+categories: update
+tags: data-analysis
+---
+```{r echo=FALSE}
+## Setup
+knitr::opts_chunk$set(echo=FALSE)
+```
+
+```{r load-packages, message=FALSE, warning=FALSE}
+## Scraping HTML
+library(rvest)
+
+## Reformatting data
+library(tidyr)
+library(dplyr)
+library(readr)
+
+## Visualization
+library(ggplot2)
+library(viridis)
+library(cowplot)
+
+theme_set(theme_bw())
+```
+
+Yesterday I submitted a poster abstract to the [ISMB 2016 conference in Orlando, Florida](https://www.iscb.org/ismb2016). This submission -- submission #449 to category "Epigenetics"" -- was a late submission, which meant that the results of submissions from rounds 1 are done and accepted abstracts are [released/listed](https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php) onto the conference’s website.
+
+*I was curious.*
+
+My submission number is 449, this meant there were 448 submissions before mine. I want to know the following:
+
+1. How many abstracts have been accepted during round 1?
+2. Of the accepted abstracts in round 1, what proportion of them were categorized as "Epigenetic"?
+
+## 16 possible categories
+
+According to the [ISMB website](https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php), there are 16 possible categories to which your abstract may belong.
+
+```{r scrape-web}
+## url
+main_url <- "https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php"
+
+
+## getting the categories
+categories <- read_html(main_url) %>% 
+  html_nodes(".style1 .noBullet") %>% 
+  html_text() 
+
+(categories <- data.frame(categories = categories) %>%
+  separate(col = categories, into = c("id", "category"), sep="\\)") %>%
+  mutate(cat_url = sprintf("%s?cat=%s", main_url, id))) %>%
+  mutate(
+    Item = sprintf("%s.", row_number()),
+    `Category/Link to posters` = sprintf("[%s](%s)", category, cat_url)
+  ) %>%
+  select(Item, `Category/Link to posters`, ID=id) %>%
+  knitr::kable(format = "markdown")
+
+
+## helper to get the titles per category
+get_titles <- function(cat_url){
+  cat_url %>% #sprintf("%s?cat=%s", main_url, "D") %>%
+  read_html() %>%
+  html_nodes(".item-page .well") %>%
+  html_text()
+}
+```
+
+And if we assume that people submit equally to all categories, we expect each category to contain 6.25% ($=\frac{100\%}{16}$) of the total number of abstracts.
+
+## Majority of posters are classified as "Sequence Analysis"
+
+When we look at the number of abstracts to each category, we find the majority of them belong to "Sequence Analysis".
+
+```{r calculations}
+## number of posters per category
+categories$n_poster <- sapply(categories$cat_url, 
+                              function(cat_url){get_titles(cat_url) %>% length}, 
+                              USE.NAMES = FALSE)
+
+## total number of posters
+total_posters <- sum(categories$n_poster)
+```
+
+```{r poster-proportions, fig.height=5, fig.width=7.5}
+categories %>%
+  mutate(percent = sprintf("%.1f%%", n_poster/total_posters*100)) %>%
+  ggplot(aes(x = reorder(category, n_poster),
+             y = n_poster,
+             label = percent)) +
+    geom_bar(stat = "identity") +
+    geom_text(y=99, hjust=1) +
+    ylim(0,95) +
+    xlab("") +
+    ylab("Count") +
+  coord_flip() +
+    ggtitle(sprintf("Number of posters per category [n = %s]", total_posters)) +
+    theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.5))
+```
+
+Here we also see there is a total of 366 abstracts accepted as of Fri, May 6, 2016. From this total, only ~2.7% or 10 abstracts have been listed as "Epigenetics". 
+
+*Not bad news.*
+
