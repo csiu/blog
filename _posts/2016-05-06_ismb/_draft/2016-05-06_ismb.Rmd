@@ -84,9 +84,13 @@ When we look at the number of abstracts to each category, we find the majority o
 
 ```{r calculations}
 ## number of posters per category
-categories$n_poster <- sapply(categories$cat_url, 
-                              function(cat_url){get_titles(cat_url) %>% length}, 
-                              USE.NAMES = FALSE)
+categories <- categories %>% 
+  group_by(category) %>%
+  mutate(
+    poster = get_titles(cat_url) %>% list(),
+    n_poster = poster %>% unlist() %>% length()
+    ) %>% 
+  ungroup()
 
 ## total number of posters
 total_posters <- sum(categories$n_poster)
@@ -112,3 +116,29 @@ Here we also see -- as of Fri, May 6, 2016 -- there is a total of 366 abstracts 
 
 *Not bad news.*
 
+```{r write-data, eval=FALSE}
+## The list of 366 abstracts
+abstracts <- categories$poster
+names(abstracts) <- categories$id
+
+## to data frame
+abstracts <- abstracts %>% 
+  unlist()  %>% 
+  as.data.frame() %>% 
+  tbl_df()
+
+colnames(abstracts) <- "title"
+
+## make rowname into a column
+abstracts$id <- rownames(abstracts) %>% 
+  {sub("\\d+$", "", .)}
+rownames(abstracts) <- NULL
+
+abstracts %>% 
+  select(category=id, title) %>%
+  write_tsv("ismb-round1-accepted-abstracts.tsv")
+```
+
+p.s.
+
+I have also made available the list of [366 abstracts](https://gist.github.com/csiu/b61c628478cfb57e2e7da91be7f88446) and the category to which they belong.
