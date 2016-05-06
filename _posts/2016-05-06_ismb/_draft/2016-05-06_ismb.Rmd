@@ -11,9 +11,12 @@ title: "Posters submitted to ISMB"
 categories: update
 tags: data-analysis
 ---
-```{r echo=FALSE}
-## Setup
-knitr::opts_chunk$set(echo=FALSE)
+```{r include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,
+                      results='hide',
+                      fig.retina = 2,
+                      fig.path='/Users/csiu/project/blog/myblog/img/figure/2016-05-06/')
+options(knitr.table.format = 'markdown')
 ```
 
 ```{r load-packages, message=FALSE, warning=FALSE}
@@ -46,7 +49,7 @@ My submission number is 449, this meant there were 448 submissions before mine. 
 
 According to the [ISMB website](https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php), there are 16 possible categories to which your abstract may belong.
 
-```{r scrape-web}
+```{r scrape-web, results='markup'}
 ## url
 main_url <- "https://www.iscb.org/cms_addon/conferences/ismb2016/posterlist.php"
 
@@ -64,7 +67,7 @@ categories <- read_html(main_url) %>%
     `Category/Link to posters` = sprintf("[%s](%s)", category, cat_url)
   ) %>%
   select(Item, `Category/Link to posters`, ID=id) %>%
-  knitr::kable(format = "markdown")
+  knitr::kable()
 
 
 ## helper to get the titles per category
