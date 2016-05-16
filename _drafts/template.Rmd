@@ -1,0 +1,21 @@
+---
+output:
+    html_document:
+        keep_md: yes
+---
+---
+layout: post
+author: "csiu"
+date:
+title:
+categories: update
+tags: data-analysis
+excerpt:
+---
+```{r include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,
+                      results='hide',
+                      fig.retina = 2,
+                      fig.path='/Users/csiu/project/blog/myblog/img/figure/')
+options(knitr.table.format = 'markdown')
+```
