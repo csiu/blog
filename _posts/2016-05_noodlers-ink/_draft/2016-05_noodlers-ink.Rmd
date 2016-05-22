@@ -1,0 +1,202 @@
+---
+output:
+    html_document:
+        keep_md: yes
+---
+---
+layout: post
+author: "csiu"
+date: 2016-05
+title: "Rating Noodler's Ink"
+categories: update
+tags: data-analysis
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,
+                      #results='hide',
+                      fig.retina = 2
+                      #fig.path='/Users/csiu/project/blog/myblog/img/figure/2016-05-06/'
+                      )
+options(knitr.table.format = 'markdown')
+```
+
+```{r load-packages, message=FALSE, warning=FALSE}
+## Reformatting data
+library(tidyr)
+library(dplyr)
+library(readr)
+
+## Visualization
+library(ggplot2)
+library(viridis)
+library(cowplot)
+
+theme_set(theme_bw())
+```
+
+> A human being is a deciding being.<br>
+> -- Viktor E. Frank
+
+I find my self wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one.
+
+```{r load-data}
+inks <- read_csv("noodersinkproperties.csv")
+ranks <- read_csv("goulet-ranks.csv")
+```
+
+Looking at a [2012 comparison of ink prices per volume](http://www.marcuslink.com/pens/ink/thebrands.html), Noodler's ink would be the most economical choice. From this line of inks, we find -- in the [Noodler's Ink Properties documentation](http://noodlersink.com/noodlers-ink-properties/) -- `r nrow(inks)` different inks. And each ink has a different combination of properties:
+
+- **Bulletproof**: whether the ink is resistant to UV, industrial solvents, or bleaching agents
+- **Eternal**: whether the ink is fade resistant -- good for archival purposes
+- **Fluorescent**: whether the ink glows under UV light
+- **Forgery Resistant**: whether the ink is impervious to lasers, alcohols, or solvents -- ideal for security documents
+- **Freeze Resistant**: whether the ink resists freezing at extremely low temperatures
+- **Lubricated**: whether the ink is lubricated (for use in piston mechanism)
+- **Water Resistant**: whether the ink is waterproof
+
+```{r plot-ink-property, warning=FALSE}
+inks %>% 
+  gather(property, value, -Ink) %>% 
+  ggplot(aes(x = value)) +
+    geom_bar() +
+    facet_grid(~property, scales = "free_x", space = "free_x") +
+    xlab("") +
+    ggtitle("Inks for a given property") +
+    theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.5))
+```
+
+```{r number-of-ink-property-combos}
+nprop <- apply(inks, 2, function(x){x %>% na.omit() %>% unique() %>% length()})
+nprop <- nprop[inks %>% select(-Ink) %>% colnames()] %>% prod()
+```
+
+In the plot of inks for a given property, we see the different values a property can take. If we consider all possible combinations, there will be `r nprop` possibilities. Fortunately, we can narrow down the choices down to `r 3*3*3` combination of properties, for I want an ink that:
+
+1. is (or at least is partially) bulletproof
+2. will not [fade](http://hudsonvalleysketches.blogspot.ca/2012/12/lightfastness-test-results-on-noodlers.html)
+3. is partially or fully waterproof (for the likely case of when water will be encountered)
+
+```{r shortlist-inks}
+inks_subset <- inks %>% 
+  filter(
+    Eternal != "No",
+    Bulletproof != "No",
+    Water_Resistant != "No"
+  ) 
+```
+
+After filtering (for my preferences) from the list of `r nrow(inks)` Noodler's inks, there are `r nrow(inks_subset)` inks left which fits my criteria. 
+
+<font color="silver">_`r gsub("^\\#", '&#35;', inks_subset$Ink) %>% paste(collapse=", ")`_</font>
+
+This is still a lot to go through. I now need a way to prioritize this list. To help prioritize this list, we will consider the ratings (taken on May 22, 2016) from [The Goulet Pen](http://www.gouletpens.com/bottled-ink/c/14/?sortBy=productName+asc&facetValueFilter=Tenant~Brand%3Anoodlers).
+
+```{r tidy-ranks}
+ranks <- ranks %>% 
+  separate(name, into=c("name", "volume"), sep=" \\(") %>% 
+  mutate(
+    has_free_pen = ifelse(!grepl("\\)$", volume), T, F),
+    volume = sub("oz.*\\).*", "", volume) %>% as.numeric(),
+    name = sub("^Noodler's ", "", name)
+  )
+```
+
+Goulet lists `r nrow(ranks)` bottles of noodler's inks. We find there are `r ranks %>% filter(volume == 3) %>% nrow()` unique inks listed. Some inks are available in both a 3oz and 4oz option.
+
+```{r define-binomtest}
+run_binomtest <- function(x){
+  tbl <- table(x)
+  binom.test(x = tbl[["TRUE"]],
+             n = sum(tbl),
+             p = 0.5,
+             alternative = "two.sided")
+}
+```
+
+```{r analyze-dups}
+dups <- ranks$name[ranks$name %>% duplicated()]
+dups <- ranks %>% filter(name %in% dups)
+
+## Plot duplicate inks
+dups %>% 
+  mutate(volume = sprintf("%s oz", volume)) %>% 
+  ggplot(aes(x=reorder(name, rating), 
+             y=rating, 
+             color=volume, 
+             group=volume)) +
+  geom_point() + 
+  geom_line() +
+  xlab("ink") +
+  ggtitle("Ink Ratings of the 3oz & 4oz options") +
+  theme(axis.text.x = element_blank())
+
+## Binomial test
+dups %>% 
+  select(name, volume, rating) %>% 
+  spread(volume, rating) %>% 
+  mutate(
+    is_4_higher_rating = `4.5` > `3`,
+    is_4_higherEqual_rating= `4.5` >= `3`
+    ) %>% 
+  {.$is_4_higher_rating} %>% 
+  run_binomtest()
+```
+
+When we look at whether the ratings was higher in 4oz option vs 3oz, we found no significant differences. We therefore took the rating from the 3oz bottle (which did not come with a free pen).
+
+```{r filter-ranks}
+ranks <- ranks %>% 
+  filter(volume == 3) 
+```
+
+```{r join}
+dat <- left_join(inks, ranks, by = c("Ink" = "name"))
+```
+
+On average, people rated Noodler's ink with `r sprintf("%.1f", mean(ranks$rating))` out of 5 stars.
+
+```{r plot-ratings}
+dat %>%
+  filter(!is.na(rating)) %>% 
+  ggplot(aes(x = rating)) + 
+    geom_bar() +
+    ggtitle(sprintf("3 oz Noodler's Ink Ratings from Goulet Pens (n=%s)",
+                    nrow(ranks)))
+```
+
+The Ink having 4.9 or more stars are: 
+```{r table-top-inks}
+dat %>% 
+  filter(rating >= 4.9) %>% 
+  arrange(desc(rating)) %>% 
+  mutate(
+    Ink = sprintf("[%s](http://www.gouletpens.com/search?query=%s)", Ink, itemId)
+  ) %>% 
+  head(20) %>% 
+  select(Ink, Rating=rating, 
+         Bulletproof, Eternal, Water_Resistant, 
+         Forgery_Resistant, Fluorescent, Lubricated, Freeze_Resistant) %>% 
+  knitr::kable()
+```
+
+Unfortunately, none of these are bulletproof, eternal, and water resistant. 
+
+```{r table-my-top-inks}
+dat %>% 
+  filter(
+    Ink %in% inks_subset$Ink,
+    rating >= 4.5) %>% 
+  arrange(desc(rating)) %>% 
+  mutate(
+    rank = rank(desc(rating), ties.method="min"),
+    Ink = sprintf("[%s](http://www.gouletpens.com/search?query=%s)", Ink, itemId)
+  ) %>% 
+  select(Rank = rank, 
+         Ink,
+         Rating = rating, 
+         Bulletproof, Eternal, Water_Resistant, 
+         Forgery_Resistant, Fluorescent, Lubricated, Freeze_Resistant) %>% 
+  knitr::kable()
+```
+
+When merge the data, want ratings above 4.5, see I should get "Black", "Blue Ghost", or "General of the Armies". "Black" is boring, "Blue Ghost" is invisible ink. Maybe get "General of the Armies".
