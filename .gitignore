@@ -4,3 +4,4 @@ _site
 .Rproj.user
 *html
 _*/*/img
+.ipynb_checkpoints
