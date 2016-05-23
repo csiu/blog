@@ -6,7 +6,7 @@ output:
 ---
 layout: post
 author: "csiu"
-date: 2016-05
+date: 2016-05-22
 title: "Rating Noodler's Ink"
 categories: update
 tags: data-analysis
@@ -14,8 +14,8 @@ tags: data-analysis
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE,
                       #results='hide',
-                      fig.retina = 2
-                      #fig.path='/Users/csiu/project/blog/myblog/img/figure/2016-05-22/'
+                      fig.retina = 2,
+                      fig.path='/Users/csiu/project/blog/myblog/img/figure/2016-05-22/'
                       )
 options(knitr.table.format = 'markdown')
 ```
