@@ -96,7 +96,7 @@ After filtering Noodler's list of `r nrow(inks)` inks, I am left with `r nrow(in
 
 <font color="silver">_`r gsub("^\\#", '&#35;', inks_subset$Ink) %>% paste(collapse=", ")`_</font>
 
-This is still a lot. I now need a way to prioritize this list and to help prioritize this list, we will consider [The Goulet Pen](http://www.gouletpens.com/bottled-ink/c/14/?sortBy=productName+asc&facetValueFilter=Tenant~Brand%3Anoodlers) ratings taken on May 22, 2016.
+This is still a lot. I now need a way to prioritize this list and to help prioritize this list, we will consider [The Goulet Pen](http://www.gouletpens.com/bottled-ink/c/14/?sortBy=productName+asc&facetValueFilter=Tenant~Brand%3Anoodlers) [ratings taken on May 22, 2016](https://gist.github.com/csiu/7d53c19edc8ff10798aa773ac3508974).
 
 ```{r tidy-ranks}
 ranks <- ranks %>% 
