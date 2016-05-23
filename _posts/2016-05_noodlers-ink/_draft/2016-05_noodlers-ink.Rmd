@@ -196,8 +196,8 @@ dat %>%
   ) %>% 
   head(20) %>% 
   select(Ink, Rating=rating, 
-         Bulletproof, Eternal, Water_Resistant, 
-         Forgery_Resistant, Fluorescent, Lubricated, Freeze_Resistant) %>% 
+         Bulletproof, Eternal, Water_Resistant
+         ) %>% 
   knitr::kable()
 ```
 
@@ -221,8 +221,7 @@ dat %>%
   select(Rank = rank, 
          Ink,
          Rating = rating, 
-         Bulletproof, Eternal, Water_Resistant, 
-         Forgery_Resistant, Fluorescent, Lubricated, Freeze_Resistant) %>% 
+         Bulletproof, Eternal, Water_Resistant) %>% 
   knitr::kable()
 ```
 
