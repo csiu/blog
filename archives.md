@@ -44,8 +44,8 @@ a.taglink {
 
         <span style='color: #aaa; font-family: Monaco, "Courier New", monospace; font-size: 60%;'>
           {{ post.date | date: "%d %b %Y" }} »
-        </span>
-        <a href="{{ post.url }}/">{{ post.title }}</a>
+        </span>the 
+        <a href="{{ post.url }}">{{ post.title }}</a>
 
         {% if post.tags.size > 0 %}
         <br>
