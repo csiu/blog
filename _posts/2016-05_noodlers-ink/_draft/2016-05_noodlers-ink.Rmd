@@ -10,6 +10,7 @@ date: 2016-05-22
 title: "Rating Noodler's Ink"
 categories: update
 tags: data-analysis
+excerpt: "I find my self wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one."
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE,
