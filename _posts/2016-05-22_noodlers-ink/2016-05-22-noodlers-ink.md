@@ -107,7 +107,7 @@ Here, I merged the Goulet Pen ratings with the shortlist of 43 inks and filtered
 |    8|[El Lawrence](http://www.gouletpens.com/search?query=N19599)           |    4.6|Yes         |Yes       |Yes             |
 |    8|[Polar Black](http://www.gouletpens.com/search?query=N19201)           |    4.6|Yes         |Yes       |Yes             |
 
-From this list, it looks like I should get "Black", "Blue Ghost", or "General of the Armies": Black is an unexceptional colour and is easily found in regular ball point pens; Blue Ghost is an invisible ink and I want something I can see; and General of the Armies is a maybe.
+From this list, it looks like I should get "Black", "Blue Ghost", or "General of the Armies": Black is an unexceptional colour and is easily found in regular ballpoint pens; Blue Ghost is an invisible ink and I want something I can see; and General of the Armies is a maybe.
 
 p.s.
 
