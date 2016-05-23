@@ -10,7 +10,7 @@ date: 2016-05-22
 title: "Rating Noodler's Ink"
 categories: update
 tags: data-analysis
-excerpt: "I find my self wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one."
+excerpt: "I find myself wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one."
 header-img-http: https://pixabay.com/static/uploads/photo/2014/09/15/22/23/fountain-pen-447576_960_720.jpg
 header-img-source: Andrys@pixabay
 ---
@@ -40,7 +40,7 @@ theme_set(theme_bw())
 > A human being is a deciding being.<br>
 > -- Viktor E. Frank
 
-I find my self wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one.
+I find myself wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one.
 
 ```{r load-data}
 inks <- read_csv("noodersinkproperties.csv")
@@ -92,11 +92,11 @@ inks_subset <- inks %>%
 
 ## Shortlist of 43 inks
 
-After filtering Noodler's list of `r nrow(inks)` inks, I am left with `r nrow(inks_subset)` inks matching my criteria.
+After filtering Noodler's list of `r nrow(inks)` inks, I am left with `r nrow(inks_subset)` matching inks.
 
-<font color="silver">_`r gsub("^\\#", '&#35;', inks_subset$Ink) %>% paste(collapse=", ")`_</font>
+<font color="silver"><em>`r gsub("^\\#", '&#35;', inks_subset$Ink) %>% paste(collapse=", ")`</em></font>
 
-This is still a lot. I now need a way to prioritize this list and to help prioritize this list, we will consider [The Goulet Pen](http://www.gouletpens.com/bottled-ink/c/14/?sortBy=productName+asc&facetValueFilter=Tenant~Brand%3Anoodlers) [ratings taken on May 22, 2016](https://gist.github.com/csiu/7d53c19edc8ff10798aa773ac3508974).
+This is still a lot. I now need a way to prioritize this list and one way to do so is to consider [The Goulet Pen](http://www.gouletpens.com/bottled-ink/c/14/?sortBy=productName+asc&facetValueFilter=Tenant~Brand%3Anoodlers) [ratings \(taken on May 22, 2016\)](https://gist.github.com/csiu/7d53c19edc8ff10798aa773ac3508974).
 
 ```{r tidy-ranks}
 ranks <- ranks %>% 
@@ -154,7 +154,7 @@ result <- dups %>%
 result$data.name <- "A success is counted if the rating is higher in the 4.5oz group"
 ```
 
-When test whether the ratings were higher in 4.5oz option vs 3oz option, we found no significant differences (p-value = `r result$p.value`). 
+When test whether the ratings were higher in 4.5oz option vs 3oz option, we found no significant differences (p-value = `r result$p.value`).
 
 - H<sub>o</sub> : No difference in ratings between the 4.5oz group and the 3oz group
 - H<sub>a</sub> : Ratings in the 4.5oz group is higher than the 3oz group
@@ -163,7 +163,7 @@ When test whether the ratings were higher in 4.5oz option vs 3oz option, we foun
 result
 ```
 
-Because the ratings were not significantly higher in the 4.5oz option, we took the rating from the 3oz option. 
+Because the ratings were not significantly higher in the 4.5oz option, we took the ratings from the 3oz option.
 
 ```{r filter-ranks}
 ranks <- ranks %>% 
@@ -176,7 +176,7 @@ dat <- left_join(inks, ranks, by = c("Ink" = "name"))
 
 ## Noodler has an average of 4.5 out of 5 stars
 
-In total there are `r ranks %>% filter(volume == 3) %>% nrow()` unique inks listed in the Goulet Pen website; and on average, people rated Noodler's ink with `r sprintf("%.1f", mean(ranks$rating))` out of 5 stars.
+In total, there are `r ranks %>% filter(volume == 3) %>% nrow()` unique inks listed in the Goulet Pen website; and on average, people gave Noodler's ink `r sprintf("%.1f", mean(ranks$rating))` out of 5 stars.
 
 ```{r plot-ratings}
 dat %>%
@@ -187,7 +187,7 @@ dat %>%
                     nrow(ranks)))
 ```
 
-The inks with a rating of 4.9 or more stars are: 
+The inks with 4.9+ stars are:
 
 ```{r table-top-inks}
 dat %>% 
@@ -203,7 +203,7 @@ dat %>%
   knitr::kable()
 ```
 
-Unfortunately, none of the top rated inks are bulletproof, eternal, and water resistant.
+Unfortunately, none of the top rated inks are bulletproof, eternal, and/or water resistant.
 
 ## The top shortlisted inks
 
@@ -227,4 +227,8 @@ dat %>%
   knitr::kable()
 ```
 
-From this list, it looks like I should get "Black", "Blue Ghost", or "General of the Armies": Black is too common; Blue Ghost is an invisble ink and I want something I can see; and General of the Armies is a maybe.
+From this list, it looks like I should get "Black", "Blue Ghost", or "General of the Armies": Black is an unexceptional colour and is easily found in regular ball point pens; Blue Ghost is an invisible ink and I want something I can see; and General of the Armies is a maybe.
+
+p.s.
+
+I have already have "Air Corp Blue Black".
