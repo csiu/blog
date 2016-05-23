@@ -49,7 +49,7 @@ On the website, Goulet lists 129 bottles of Noodler's inks, 14 of which are dupl
 
 <img src="{{ site.baseurl }}/img/figure/2016-05-22/plot-dups-1.png" title="" alt="" width="672" />
 
-When test whether the ratings were higher in 4.5oz option vs 3oz option, we found no significant differences (p-value = 0.4239502).
+When tested for whether the ratings were higher in 4.5oz option vs 3oz option, we found no significant differences (p-value = 0.4239502).
 
 - H<sub>o</sub> : No difference in ratings between the 4.5oz group and the 3oz group
 - H<sub>a</sub> : Ratings in the 4.5oz group is higher than the 3oz group
