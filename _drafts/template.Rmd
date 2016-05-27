@@ -11,11 +11,26 @@ title:
 categories: update
 tags: data-analysis
 excerpt:
+header-img-http:
+header-img-source:
 ---
 ```{r include=FALSE}
 knitr::opts_chunk$set(echo=FALSE,
                       results='hide',
-                      fig.retina = 2,
-                      fig.path='/Users/csiu/project/blog/myblog/img/figure/')
+                      #fig.path='/Users/csiu/project/blog/myblog/img/figure/YYYY-MM-DD',
+                      fig.retina = 2
+		      )
 options(knitr.table.format = 'markdown')
+```
+
+```{r load-packages, message=FALSE, warning=FALSE}
+## Reformatting data
+library(tidyr)
+library(dplyr)
+
+## Visualization
+library(ggplot2)
+library(cowplot)
+
+theme_set(theme_bw())
 ```
