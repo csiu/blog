@@ -2,7 +2,7 @@
 layout: post
 author: "csiu"
 date: 2016-05-27
-title: "Scraping HTML"
+title: "Scraping HTML & Javascript generated webpages"
 categories: update
 tags: setup
 excerpt: "The concept is simple, but getting the data required a bit more work"
