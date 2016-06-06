@@ -1,0 +1,66 @@
+---
+output:
+    html_document:
+        keep_md: yes
+---
+---
+layout: post
+author: "csiu"
+date: 2016-06-05
+title: Perfectionism
+categories: update
+tags: data-analysis
+excerpt:
+header-img-http: https://pixabay.com/static/uploads/photo/2015/02/13/14/38/pretty-woman-635258_960_720.jpg
+header-img-source: jil111@pixabay
+---
+```{r include=FALSE}
+knitr::opts_chunk$set(echo=FALSE,
+                      #results='hide',
+                      #fig.path='/Users/csiu/project/blog/myblog/img/figure/YYYY-MM-DD',
+                      fig.retina = 2
+		      )
+options(knitr.table.format = 'markdown')
+```
+
+```{r load-packages, message=FALSE, warning=FALSE}
+## Reformatting data
+library(tidyr)
+library(dplyr)
+
+## Visualization
+library(ggplot2)
+library(cowplot)
+
+theme_set(theme_bw())
+```
+
+Three weeks ago, I -- along with 34 other people -- attended an “Overcoming perfectionism: Bring more ease & success into your life” workshop.
+
+Of the 35 who attended, 11 were male and 24 were female.
+
+> **Two futile formulas**<br>
+> - Self worth = Ability = Performance<br>
+> - Ordinary = Not outstanding = Not loved
+
+Seeing as there were more females than males, I wondered (assuming a null hypothesis of equal turnout of males and females) whether there was significantly more females than males present at this event.
+
+> **There are 4 "Perfectionism Types"**
+>
+> - Self-orientated
+> - Other-orientated
+> - Socially-orientated
+
+Applying the [exact binomial test of goodness-of-fit](http://www.biostathandbook.com/exactgof.html) to test for equal attendance of females and males, we get a p-value (representing the probability of getting a result like the observed result if the null hypothesis were true) of 0.04.
+
+```{r}
+binom.test(24, 35, 0.5)
+```
+
+> **Three types of thinking traps**
+>
+> - All or nothing thinking
+> - Should/Must thinking
+> - Minimization/Maximization
+
+Seeing that the p-value of 0.04 is less than the typical significant level of 0.05, we reject the null hypothesis and conclude that there were significantly more females than males present at this event. 
