@@ -51,15 +51,14 @@ blockquote li {
 
 Three weeks ago, I -- along with 34 other people -- attended an “Overcoming perfectionism: Bring more ease & success into your life” workshop.
 
-Of the 35 who attended, 11 were male and 24 were female.
-
-> **Two futile formulas**<br>
-> - Self worth = Ability = Performance<br>
+> **2 futile formulas:**
+>
+> - Self worth = Ability = Performance
 > - Ordinary = Not outstanding = Not loved
 
 Seeing as there were more females than males, I wondered (assuming a null hypothesis of equal turnout of males and females) whether there was significantly more females than males present at this event.
 
-> **There are 4 "Perfectionism Types"**
+> **3 types of perfectionism:**
 >
 > - Self-orientated
 > - Other-orientated
@@ -71,10 +70,11 @@ Applying the [exact binomial test of goodness-of-fit](http://www.biostathandbook
 binom.test(24, 35, 0.5)
 ```
 
-> **Three types of thinking traps**
+> **3 types of thinking traps:**
 >
 > - All or nothing thinking
 > - Should/Must thinking
-> - Minimization/Maximization
+> - Minimization/Magnification
+
 
 Seeing that the p-value of 0.04 is less than the typical significant level of 0.05, we reject the null hypothesis and conclude that there were significantly more females than males present at this event. 
