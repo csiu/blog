@@ -6,7 +6,7 @@ title: "Scraping HTML & Javascript generated webpages"
 categories: update
 tags: setup
 excerpt: "The concept is simple, but getting the data required a bit more work"
-header-img-http: https://pixabay.com/static/uploads/photo/2015/10/19/13/36/extension-996004_960_720.jpg
+header-img-http: /img/header/2016-05-27_RUINS.jpg
 header-img-source: RUINS@pixabay
 ---
 
