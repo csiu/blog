@@ -4,6 +4,6 @@ setup:
 data-analysis:
   slug: data-analysis
   name: Data analysis
-review:
-  slug: review
-  name: Review
+inspect:
+  slug: inspect
+  name: Inspect
