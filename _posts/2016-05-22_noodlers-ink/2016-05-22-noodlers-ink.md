@@ -6,7 +6,7 @@ title: "Rating Noodler's Ink"
 categories: update
 tags: data-analysis
 excerpt: "I find myself wanting a new ink for my fountain pen, but the problem I have is that I can't decide on which one."
-header-img-http: /img/header/2016-05-22_Andrys.jpg
+header-img: img/header/2016-05-22_Andrys.jpg
 header-img-source: Andrys@pixabay
 ---
 

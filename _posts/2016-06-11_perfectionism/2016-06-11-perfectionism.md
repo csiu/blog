@@ -6,7 +6,7 @@ title: Perfectionism
 categories: update
 tags: data-analysis
 excerpt: More girls than guys?
-header-img-http: /img/header/2016-06-11_jil111.jpg
+header-img: img/header/2016-06-11_jil111.jpg
 header-img-source: jil111@pixabay
 ---
 

@@ -27,7 +27,7 @@ layout: default
 {% endif %}
 
 <!-- Post Header -->
-<header class="intro-header" style="background-image: url({{ site.baseurl }}/{% if page.header-img-http %}{{ page.header-img-http }}{% else %}'{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}'{% endif %})">
+<header class="intro-header" style="background-image: url({% if page.header-img-http %}{{ page.header-img-http }}{% elsif page.header-img %}{{ site.baseurl }}{{ page.header-img }}{% else %}{{ site.baseurl }}{{ site.header-img }}{% endif %})">
 
   <div class="container">
     <div class="row">
