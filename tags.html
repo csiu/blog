@@ -11,7 +11,7 @@ description: Find posts tagged <i class="fa fa-tags"></i> with ...
     <span style='color: #aaa; font-family: Monaco, "Courier New", monospace; font-size: 60%;'>
       Tag »
     </span>
-    <a href="/tag/{{ tag | map: 'slug' }}">{{ tag | map: "name" }}</a>
+    <a href="{{ site.baseurl }}/tag/{{ tag | map: 'slug' }}">{{ tag | map: "name" }}</a>
   </li>
   {% endfor %}
 </ul>

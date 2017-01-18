@@ -21,7 +21,7 @@ a.taglink {
       {% for post_tag in post.tags %}
         {% assign tag = site.data.tags[post_tag] %}
         {% if tag %}
-          {% capture tags_content_temp %}{{ tags_content_tags }}<a class="taglink" href="/tag/{{ tag.slug }}">{{ tag.name }}</a>{% if forloop.last == false %}, {% endif %}{% endcapture %}
+          {% capture tags_content_temp %}{{ tags_content_tags }}<a class="taglink" href="{{ site.baseurl }}/tag/{{ tag.slug }}">{{ tag.name }}</a>{% if forloop.last == false %}, {% endif %}{% endcapture %}
           {% assign tags_content_tags = tags_content_temp %}
         {% endif %}
       {% endfor %}
@@ -45,7 +45,7 @@ a.taglink {
         <span style='color: #aaa; font-family: Monaco, "Courier New", monospace; font-size: 60%;'>
           {{ post.date | date: "%d %b %Y" }} »
         </span>
-        <a href="{{ post.url }}">{{ post.title }}</a>
+        <a href="{{ site.baseurl }}/{{ post.url }}">{{ post.title }}</a>
 
         {% if post.tags.size > 0 %}
         <br>
