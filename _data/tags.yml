@@ -7,3 +7,12 @@ data-analysis:
 inspect:
   slug: inspect
   name: Inspect
+100daysofcode:
+  slug: 100daysofcode
+  name: 100daysofcode
+machine-learning:
+  slug: machine-learning
+  name: Machine Learning
+kaggle:
+  slug: kaggle
+  name: Kaggle
