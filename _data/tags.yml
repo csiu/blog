@@ -13,6 +13,9 @@ inspect:
 machine-learning:
   slug: machine-learning
   name: Machine Learning
+text-mining:
+  slug: text-mining
+  name: Text mining
 kaggle:
   slug: kaggle
   name: Kaggle
