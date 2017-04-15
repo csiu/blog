@@ -1,3 +1,6 @@
 table th, table td {
       padding-right: 20px;
 }
+blockquote {
+  padding: 0px 20px;
+}
